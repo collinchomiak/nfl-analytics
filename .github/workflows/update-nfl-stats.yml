@@ -3,7 +3,7 @@ name: Update NFL Statistics
 
 on:
   schedule:
-    # Every day at 10:00 AM UTC (3:00 AM Arizona time)
+    # Daily at 10:00 AM UTC (3:00 AM Arizona time)
     - cron: '0 10 * * *'
 
   workflow_dispatch:
@@ -23,8 +23,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
-        with:
-          persist-credentials: true
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -42,11 +40,13 @@ jobs:
         run: npm run build
 
       - name: Commit updated statistics
+        id: commit_stats
         run: |
           git add src/data/playerStats2026.json
 
           if git diff --cached --quiet; then
             echo "No statistical changes. Nothing to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -55,3 +55,23 @@ jobs:
 
           git commit -m "chore: update 2026 NFL player statistics"
           git push
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger Vercel deployment
+        if: steps.commit_stats.outputs.changed == 'true'
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$VERCEL_DEPLOY_HOOK" ]; then
+            echo "Missing VERCEL_DEPLOY_HOOK secret."
+            exit 1
+          fi
+
+          curl --fail --silent --show-error \
+            --retry 3 \
+            --request POST \
+            "$VERCEL_DEPLOY_HOOK"
+
+          echo ""
+          echo "Vercel deployment requested successfully."
