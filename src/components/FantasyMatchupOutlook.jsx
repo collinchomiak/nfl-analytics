@@ -2,8 +2,9 @@
 import { useState } from 'react'
 import { getFantasyLineup } from '../data/teamLineups'
 import { getPositionalMatchup } from '../data/positionalMatchups'
+import { getRBReceivingMatchup } from '../data/rbReceivingMatchups'
 
-const positions = ['QB', 'RB', 'WR', 'TE']
+const positions = ['QB', 'RB', 'WR', 'TE', 'RB REC']
 
 const formatNumber = value =>
   Number.isFinite(value) ? value.toLocaleString('en-US') : '—'
@@ -11,13 +12,30 @@ const formatNumber = value =>
 const formatAverage = (value, decimals = 1) =>
   Number.isFinite(value) ? value.toFixed(decimals) : '—'
 
-function getPlayerStats(player) {
+function getPlayerStats(player, receivingOnly = false) {
   const stats = player.stats
+
+  if (receivingOnly) {
+    return [
+      { label: 'TGT', total: stats.targets },
+      { label: 'REC', total: stats.receptions },
+      { label: 'REC YDS', total: stats.receivingYards },
+      {
+        label: 'REC TD',
+        total: stats.receivingTDs,
+        isTouchdown: true
+      }
+    ]
+  }
 
   if (player.position === 'QB') {
     return [
       { label: 'PASS YDS', total: stats.passingYards },
-      { label: 'PASS TD', total: stats.passingTDs, isTouchdown: true },
+      {
+        label: 'PASS TD',
+        total: stats.passingTDs,
+        isTouchdown: true
+      },
       { label: 'RUSH YDS', total: stats.rushingYards },
       { label: 'INT', total: stats.interceptions }
     ]
@@ -26,9 +44,18 @@ function getPlayerStats(player) {
   if (player.position === 'RB') {
     return [
       { label: 'RUSH YDS', total: stats.rushingYards },
-      { label: 'RUSH TD', total: stats.rushingTDs, isTouchdown: true },
+      {
+        label: 'RUSH TD',
+        total: stats.rushingTDs,
+        isTouchdown: true
+      },
       { label: 'REC', total: stats.receptions },
-      { label: 'REC YDS', total: stats.receivingYards }
+      { label: 'REC YDS', total: stats.receivingYards },
+      {
+        label: 'REC TD',
+        total: stats.receivingTDs,
+        isTouchdown: true
+      }
     ]
   }
 
@@ -36,7 +63,11 @@ function getPlayerStats(player) {
     { label: 'TGT', total: stats.targets },
     { label: 'REC', total: stats.receptions },
     { label: 'REC YDS', total: stats.receivingYards },
-    { label: 'REC TD', total: stats.receivingTDs, isTouchdown: true }
+    {
+      label: 'REC TD',
+      total: stats.receivingTDs,
+      isTouchdown: true
+    }
   ]
 }
 
@@ -47,12 +78,26 @@ function FantasyMatchupOutlook({
 }) {
   const [activePosition, setActivePosition] = useState('WR')
 
+  const receivingOnly = activePosition === 'RB REC'
+  const lineupPosition = receivingOnly ? 'RB' : activePosition
+
   const lineup = getFantasyLineup(teamId)
-  const players = lineup[activePosition] ?? []
-  const matchup = getPositionalMatchup(opponentId, activePosition)
+  const players = lineup[lineupPosition] ?? []
+
+  const matchup = receivingOnly
+    ? getRBReceivingMatchup(opponentId)
+    : getPositionalMatchup(opponentId, activePosition)
 
   const tierColor = matchup?.tier?.color ?? '#8392a5'
   const tierLabel = matchup?.tier?.label ?? 'Unavailable'
+
+  const matchupRank = matchup?.rank ?? null
+
+  const playerStatCount = receivingOnly
+    ? 4
+    : activePosition === 'RB'
+      ? 5
+      : 4
 
   return (
     <div className="roster-preview fantasy-outlook">
@@ -78,6 +123,7 @@ function FantasyMatchupOutlook({
                 : 'fantasy-outlook-tab'
             }
             onClick={() => setActivePosition(position)}
+            aria-pressed={activePosition === position}
           >
             {position}
           </button>
@@ -85,32 +131,79 @@ function FantasyMatchupOutlook({
       </div>
 
       {matchup ? (
-        <div className="fantasy-matchup-summary">
+        <div
+          className={
+            receivingOnly
+              ? 'fantasy-matchup-summary fantasy-rb-receiving-summary'
+              : 'fantasy-matchup-summary'
+          }
+        >
           <div
             className="fantasy-matchup-dot"
             style={{ backgroundColor: tierColor }}
+            title={tierLabel}
           />
 
           <div className="fantasy-matchup-summary-text">
             <strong>
               {opponentId} vs. {activePosition}
             </strong>
+
             <small>
-              Rank #{matchup.rank} · {tierLabel}
+              Rank #{matchupRank} · {tierLabel}
             </small>
+
+            {receivingOnly && (
+              <small>
+                Ranked by RB receiving yards allowed/game
+              </small>
+            )}
           </div>
 
           <div className="fantasy-matchup-ppr">
             <strong>
-              {formatAverage(matchup.perGame.fantasyPoints)}
+              {receivingOnly
+                ? formatAverage(matchup.perGame.receivingYards)
+                : formatAverage(matchup.perGame.fantasyPoints)}
             </strong>
-            <small>PPR/G</small>
+
+            <small>
+              {receivingOnly ? 'REC YDS/G' : 'PPR/G'}
+            </small>
           </div>
         </div>
       ) : (
         <p className="fantasy-outlook-empty">
           Positional matchup data unavailable.
         </p>
+      )}
+
+      {receivingOnly && matchup && (
+        <div className="fantasy-rb-receiving-details">
+          <div className="fantasy-rb-receiving-detail">
+            <small>RB TGT/G ALLOWED</small>
+            <strong>
+              {formatAverage(matchup.perGame.targets)}
+            </strong>
+          </div>
+
+          <div className="fantasy-rb-receiving-detail">
+            <small>RB REC/G ALLOWED</small>
+            <strong>
+              {formatAverage(matchup.perGame.receptions)}
+            </strong>
+          </div>
+
+          <div className="fantasy-rb-receiving-detail">
+            <small>RB REC TD/G ALLOWED</small>
+            <strong>
+              {formatAverage(
+                matchup.perGame.receivingTDs,
+                2
+              )}
+            </strong>
+          </div>
+        </div>
       )}
 
       <div className="fantasy-player-list">
@@ -122,8 +215,16 @@ function FantasyMatchupOutlook({
               ? player.stats.fantasyPointsPPR / games
               : 0
 
+            const playerStats = getPlayerStats(
+              player,
+              receivingOnly
+            )
+
             return (
-              <div className="fantasy-player-card" key={player.id}>
+              <div
+                className="fantasy-player-card"
+                key={player.id}
+              >
                 <div className="fantasy-player-heading">
                   <span className="fantasy-player-role">
                     {player.role}
@@ -144,21 +245,47 @@ function FantasyMatchupOutlook({
                     )}
 
                     <small>
-                      {games} {games === 1 ? 'game' : 'games'} ·{' '}
-                      {formatAverage(playerPPR)} PPR/game
+                      {games}{' '}
+                      {games === 1 ? 'game' : 'games'}
+                      {receivingOnly ? (
+                        <>
+                          {' · '}
+                          {formatAverage(
+                            games
+                              ? player.stats.receivingYards / games
+                              : 0
+                          )}{' '}
+                          receiving yards/game
+                        </>
+                      ) : (
+                        <>
+                          {' · '}
+                          {formatAverage(playerPPR)} PPR/game
+                        </>
+                      )}
                     </small>
                   </div>
 
                   <span
                     className="fantasy-player-dot"
                     style={{ backgroundColor: tierColor }}
-                    title={`${activePosition} matchup: ${tierLabel}`}
-                    aria-label={`${tierLabel} ${activePosition} matchup`}
+                    title={
+                      `${activePosition} matchup: ${tierLabel}`
+                    }
+                    aria-label={
+                      `${tierLabel} ${activePosition} matchup`
+                    }
                   />
                 </div>
 
-                <div className="fantasy-player-stats">
-                  {getPlayerStats(player).map(stat => {
+                <div
+                  className={
+                    playerStatCount === 5
+                      ? 'fantasy-player-stats fantasy-player-stats-five'
+                      : 'fantasy-player-stats'
+                  }
+                >
+                  {playerStats.map(stat => {
                     const average = games
                       ? stat.total / games
                       : 0
@@ -193,17 +320,20 @@ function FantasyMatchupOutlook({
           })
         ) : (
           <p className="fantasy-outlook-empty">
-            No recorded {activePosition} players for this team.
+            No recorded {lineupPosition} players
+            for this team.
           </p>
         )}
       </div>
 
       <p className="fantasy-outlook-note">
-        Stats show season totals with per-game averages in
-        parentheses. Player order reflects 2026 season
-        production, not an official depth chart. Matchup
-        colors reflect PPR points allowed to the entire
-        position group, not individual player projections.
+        Stats show season totals with per-game averages
+        in parentheses. Player order reflects 2026 season
+        production, not an official depth chart.
+        {' '}
+        {receivingOnly
+          ? 'RB REC ranks defenses only by receiving yards allowed to opposing running backs per game. Rushing production and PPR scoring are excluded from this ranking.'
+          : 'QB, RB, WR, and TE matchup colors reflect PPR points allowed to the entire position group, not individual player projections.'}
       </p>
     </div>
   )
