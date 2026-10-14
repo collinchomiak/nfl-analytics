@@ -22,6 +22,7 @@ import {
 import {
   getTouchdownProbabilities
 } from './data/touchdownProbabilities'
+import { getMatchupPrediction } from './data/matchupPredictions'
 import DefensiveBreakdown from './pages/DefensiveBreakdown'
 import PlayerGameLogs from './pages/PlayerGameLogs'
 import FantasyMatchupOutlook from './components/FantasyMatchupOutlook'
@@ -396,6 +397,254 @@ function TouchdownMatchup({ offense, defense, touchdownType }) {
   )
 }
 
+function PredictionCard({
+  awayTeam,
+  homeTeam,
+  neutralSite,
+  onNeutralSiteChange
+}) {
+  const prediction = getMatchupPrediction(
+    awayTeam,
+    homeTeam,
+    neutralSite
+  )
+
+  const winner = prediction?.projectedWinner
+  const winnerInfo = winner ? teams[winner] : null
+
+  const isStrongEdge =
+    prediction?.modelEdge === 'Strong Model Edge'
+
+  const isModerateEdge =
+    prediction?.modelEdge === 'Moderate Model Edge'
+
+  const edgeColor = isStrongEdge
+    ? '#a8e276'
+    : isModerateEdge
+      ? '#e6cb55'
+      : '#aebac9'
+
+  return (
+    <div
+      style={{
+        marginBottom: '24px',
+        padding: '16px',
+        background: '#141b24',
+        border: '1px solid #3b4b5d',
+        borderRadius: '10px'
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+          paddingBottom: '13px',
+          borderBottom: '1px solid #303c4a'
+        }}
+      >
+        <div
+          style={{
+            color: '#e4eaf2',
+            fontSize: '12px',
+            fontWeight: '800',
+            letterSpacing: '0.3px'
+          }}
+        >
+          🏈 Game Prediction
+        </div>
+
+        <label
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '7px',
+            color: '#aebac9',
+            fontSize: '11px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={neutralSite}
+            onChange={event =>
+              onNeutralSiteChange(event.target.checked)
+            }
+            style={{
+              cursor: 'pointer',
+              accentColor: '#89c9ff'
+            }}
+          />
+          Neutral Site
+        </label>
+      </div>
+
+      {prediction ? (
+        <>
+          <div
+            style={{
+              marginTop: '16px',
+              paddingBottom: '15px',
+              borderBottom: '1px solid #303c4a'
+            }}
+          >
+            <div
+              style={{
+                color: '#96a3b4',
+                fontSize: '10px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                marginBottom: '8px'
+              }}
+            >
+              Projected Winner
+            </div>
+
+            <div
+              style={{
+                color: winnerInfo?.color ?? '#e4eaf2',
+                fontSize: '20px',
+                fontWeight: '800',
+                lineHeight: '1.3'
+              }}
+            >
+              {winnerInfo?.name ?? 'Too Close to Call'}
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: '10px',
+              marginTop: '14px'
+            }}
+          >
+            <div
+              style={{
+                padding: '12px 10px',
+                borderRadius: '8px',
+                background: '#253140',
+                border: '1px solid #384657',
+                minWidth: 0
+              }}
+            >
+              <div
+                style={{
+                  color: '#aebac9',
+                  fontSize: '10px',
+                  marginBottom: '9px'
+                }}
+              >
+                Model Edge
+              </div>
+
+              <div
+                style={{
+                  color: edgeColor,
+                  fontSize: '14px',
+                  fontWeight: '800',
+                  lineHeight: '1.4'
+                }}
+              >
+                {prediction.modelEdge.replace(' Model Edge', '')}
+              </div>
+            </div>
+
+            <div
+              style={{
+                padding: '12px 10px',
+                borderRadius: '8px',
+                background: '#253140',
+                border: '1px solid #384657',
+                minWidth: 0
+              }}
+            >
+              <div
+                style={{
+                  color: '#aebac9',
+                  fontSize: '10px',
+                  marginBottom: '7px'
+                }}
+              >
+                Projected Game Total
+              </div>
+
+              <div
+                style={{
+                  color: '#e4eaf2',
+                  fontSize: '25px',
+                  fontWeight: '800',
+                  lineHeight: '1.2'
+                }}
+              >
+                {prediction.projectedTotal.toFixed(1)}
+              </div>
+
+              <div
+                style={{
+                  color: '#8392a5',
+                  fontSize: '10px',
+                  marginTop: '5px'
+                }}
+              >
+                Combined points
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: '12px',
+              color: '#8392a5',
+              fontSize: '11px',
+              lineHeight: '1.7'
+            }}
+          >
+            {neutralSite
+              ? 'Neutral-site mode: home/away scoring adjustments are disabled.'
+              : 'Location adjustments reflect each team’s home/away scoring performance and are moderated for sample size.'}
+          </div>
+        </>
+      ) : (
+        <div
+          style={{
+            padding: '20px 0',
+            color: '#aebac9',
+            fontSize: '12px',
+            lineHeight: '1.7'
+          }}
+        >
+          {awayTeam === homeTeam
+            ? 'Choose two different teams to generate a prediction.'
+            : 'Not enough completed games to generate a prediction yet.'}
+        </div>
+      )}
+
+      <div
+        style={{
+          marginTop: '14px',
+          paddingTop: '12px',
+          borderTop: '1px solid #303c4a',
+          color: '#77889d',
+          fontSize: '10px',
+          lineHeight: '1.7'
+        }}
+      >
+        Experimental, unvalidated statistical model.
+        Predictions do not account for injuries, weather,
+        lineup changes, or opponent strength beyond observed
+        scoring performance. Model edge describes projected
+        scoring separation, not win probability.
+      </div>
+    </div>
+  )
+}
+
 function TeamPanel({
   teamId,
   opponentId,
@@ -413,7 +662,7 @@ function TeamPanel({
       style={{ '--team-color': team.color }}
     >
       <div className="panel-heading">
-        TEAM {index + 1}
+        {index === 0 ? 'AWAY' : 'HOME'}
       </div>
 
       <h3>{team.name}</h3>
@@ -535,6 +784,7 @@ function TeamPanel({
 function App() {
   const [team1, setTeam1] = useState('KC')
   const [team2, setTeam2] = useState('PHI')
+  const [neutralSite, setNeutralSite] = useState(false)
   const [activePage, setActivePage] = useState('comparison')
 
   const [defenseNavigation, setDefenseNavigation] = useState({
@@ -598,7 +848,7 @@ function App() {
         </div>
 
         <div className="selector-group">
-          <label htmlFor="team1">Team 1</label>
+          <label htmlFor="team1">Away Team</label>
           <select
             id="team1"
             value={team1}
@@ -613,7 +863,7 @@ function App() {
         </div>
 
         <div className="selector-group">
-          <label htmlFor="team2">Team 2</label>
+          <label htmlFor="team2">Home Team</label>
           <select
             id="team2"
             value={team2}
@@ -706,7 +956,7 @@ function App() {
               <h3>Matchup Analysis</h3>
 
               <div className="division">
-                {teams[team1].name} vs. {teams[team2].name}
+                {teams[team1].name} (Away) @ {teams[team2].name} (Home)
               </div>
 
               <p
@@ -722,6 +972,13 @@ function App() {
                 advantages. Touchdowns use experimental
                 probability estimates for each offense.
               </p>
+
+              <PredictionCard
+                awayTeam={team1}
+                homeTeam={team2}
+                neutralSite={neutralSite}
+                onNeutralSiteChange={setNeutralSite}
+              />
 
               {yardageCategories.map(category => (
                 <div
