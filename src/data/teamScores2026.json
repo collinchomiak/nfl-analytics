@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-10-14T06:09:44.063Z",
+  "updatedAt": "2026-10-16T14:42:38.344Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -789,6 +789,16 @@
       "homeTeam": "DAL",
       "awayScore": 24,
       "homeScore": 16,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_06_SEA_DEN",
+      "week": 6,
+      "awayTeam": "SEA",
+      "homeTeam": "DEN",
+      "awayScore": 14,
+      "homeScore": 17,
       "location": "Home",
       "neutralSite": false
     }
