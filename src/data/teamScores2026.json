@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-10-20T14:53:10.000Z",
+  "updatedAt": "2026-10-23T14:50:49.905Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -929,6 +929,16 @@
       "homeTeam": "SF",
       "awayScore": 17,
       "homeScore": 23,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_NE_CHI",
+      "week": 7,
+      "awayTeam": "NE",
+      "homeTeam": "CHI",
+      "awayScore": 24,
+      "homeScore": 30,
       "location": "Home",
       "neutralSite": false
     }
