@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-10-23T14:50:49.905Z",
+  "updatedAt": "2026-10-26T16:41:35.112Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -933,12 +933,132 @@
       "neutralSite": false
     },
     {
+      "gameId": "2026_07_CIN_BAL",
+      "week": 7,
+      "awayTeam": "CIN",
+      "homeTeam": "BAL",
+      "awayScore": 35,
+      "homeScore": 13,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_CLE_TEN",
+      "week": 7,
+      "awayTeam": "CLE",
+      "homeTeam": "TEN",
+      "awayScore": 27,
+      "homeScore": 24,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_DEN_ARI",
+      "week": 7,
+      "awayTeam": "DEN",
+      "homeTeam": "ARI",
+      "awayScore": 30,
+      "homeScore": 16,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_GB_DET",
+      "week": 7,
+      "awayTeam": "GB",
+      "homeTeam": "DET",
+      "awayScore": 17,
+      "homeScore": 20,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_IND_MIN",
+      "week": 7,
+      "awayTeam": "IND",
+      "homeTeam": "MIN",
+      "awayScore": 10,
+      "homeScore": 16,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_KC_SEA",
+      "week": 7,
+      "awayTeam": "KC",
+      "homeTeam": "SEA",
+      "awayScore": 3,
+      "homeScore": 20,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_LA_LV",
+      "week": 7,
+      "awayTeam": "LA",
+      "homeTeam": "LV",
+      "awayScore": 35,
+      "homeScore": 21,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_MIA_NYJ",
+      "week": 7,
+      "awayTeam": "MIA",
+      "homeTeam": "NYJ",
+      "awayScore": 28,
+      "homeScore": 25,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
       "gameId": "2026_07_NE_CHI",
       "week": 7,
       "awayTeam": "NE",
       "homeTeam": "CHI",
       "awayScore": 24,
       "homeScore": 30,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_NYG_HOU",
+      "week": 7,
+      "awayTeam": "NYG",
+      "homeTeam": "HOU",
+      "awayScore": 27,
+      "homeScore": 21,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_PIT_NO",
+      "week": 7,
+      "awayTeam": "PIT",
+      "homeTeam": "NO",
+      "awayScore": 16,
+      "homeScore": 10,
+      "location": "Neutral",
+      "neutralSite": true
+    },
+    {
+      "gameId": "2026_07_SF_ATL",
+      "week": 7,
+      "awayTeam": "SF",
+      "homeTeam": "ATL",
+      "awayScore": 20,
+      "homeScore": 29,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_TB_CAR",
+      "week": 7,
+      "awayTeam": "TB",
+      "homeTeam": "CAR",
+      "awayScore": 43,
+      "homeScore": 13,
       "location": "Home",
       "neutralSite": false
     }
