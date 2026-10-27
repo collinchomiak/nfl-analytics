@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-10-26T16:41:35.112Z",
+  "updatedAt": "2026-10-27T15:48:48.854Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -949,6 +949,16 @@
       "homeTeam": "TEN",
       "awayScore": 27,
       "homeScore": 24,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_07_DAL_PHI",
+      "week": 7,
+      "awayTeam": "DAL",
+      "homeTeam": "PHI",
+      "awayScore": 38,
+      "homeScore": 21,
       "location": "Home",
       "neutralSite": false
     },
