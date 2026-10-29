@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { getFantasyLineup } from '../data/teamLineups'
 import { getPositionalMatchup } from '../data/positionalMatchups'
 import { getRBReceivingMatchup } from '../data/rbReceivingMatchups'
+import { getPlayersAgainstDefense, getTeamStats } from '../data/nflCalculations'
 
 const positions = ['QB', 'RB', 'WR', 'TE', 'RB REC']
 
@@ -11,6 +12,41 @@ const formatNumber = value =>
 
 const formatAverage = (value, decimals = 1) =>
   Number.isFinite(value) ? value.toFixed(decimals) : '—'
+
+// Counts TDs scored by opposing players against this defense.
+// Position and scoring type follow the selected fantasy tab.
+function getTouchdownsAllowed(defenseId, position) {
+  const defenseStats = getTeamStats(defenseId)
+  const gamesPlayed = defenseStats?.gamesPlayed ?? 0
+
+  if (!gamesPlayed) return null
+
+  const receivingOnly = position === 'RB REC'
+  const playerPosition = receivingOnly ? 'RB' : position
+  const touchdownField = position === 'QB'
+    ? 'passing_tds'
+    : position === 'RB'
+      ? 'rushing_tds'
+      : 'receiving_tds'
+
+  const total = getPlayersAgainstDefense(defenseId)
+    .filter(player => player.position === playerPosition)
+    .reduce((sum, player) => {
+      const count = Number(player[touchdownField])
+      return sum + (Number.isFinite(count) ? count : 0)
+    }, 0)
+
+  return {
+    total,
+    perGame: total / gamesPlayed,
+    gamesPlayed,
+    typeLabel: position === 'QB'
+      ? 'Passing TDs'
+      : position === 'RB'
+        ? 'Rushing TDs'
+        : 'Receiving TDs'
+  }
+}
 
 function getPlayerStats(player, receivingOnly = false) {
   const stats = player.stats
@@ -87,6 +123,8 @@ function FantasyMatchupOutlook({
   const matchup = receivingOnly
     ? getRBReceivingMatchup(opponentId)
     : getPositionalMatchup(opponentId, activePosition)
+
+  const touchdownsAllowed = getTouchdownsAllowed(opponentId, activePosition)
 
   const tierColor = matchup?.tier?.color ?? '#8392a5'
   const tierLabel = matchup?.tier?.label ?? 'Unavailable'
@@ -176,6 +214,79 @@ function FantasyMatchupOutlook({
         <p className="fantasy-outlook-empty">
           Positional matchup data unavailable.
         </p>
+      )}
+
+      {touchdownsAllowed && (
+        <div
+          style={{
+            marginTop: '10px',
+            marginBottom: '12px',
+            padding: '12px',
+            borderRadius: '9px',
+            background: '#141b24',
+            border: '1px solid #303c4a'
+          }}
+        >
+          <div
+            style={{
+              color: '#e4eaf2',
+              fontSize: '12px',
+              fontWeight: '800',
+              marginBottom: '10px'
+            }}
+          >
+            {activePosition} TDs Allowed by {opponentId}
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: '9px'
+            }}
+          >
+            <div
+              style={{
+                background: '#253140',
+                borderRadius: '7px',
+                padding: '10px'
+              }}
+            >
+              <small style={{ color: '#aebac9' }}>
+                SEASON TOTAL
+              </small>
+              <div style={{ color: '#e4eaf2', fontSize: '22px', fontWeight: '800' }}>
+                {formatNumber(touchdownsAllowed.total)}
+              </div>
+            </div>
+
+            <div
+              style={{
+                background: '#253140',
+                borderRadius: '7px',
+                padding: '10px'
+              }}
+            >
+              <small style={{ color: '#aebac9' }}>
+                TDs / GAME
+              </small>
+              <div style={{ color: '#e4eaf2', fontSize: '22px', fontWeight: '800' }}>
+                {formatAverage(touchdownsAllowed.perGame, 2)}
+              </div>
+            </div>
+          </div>
+
+          <small
+            style={{
+              display: 'block',
+              marginTop: '9px',
+              color: '#8392a5',
+              lineHeight: '1.5'
+            }}
+          >
+            {touchdownsAllowed.typeLabel} scored by opposing {activePosition === 'RB REC' ? 'RBs' : `${activePosition}s`} across {touchdownsAllowed.gamesPlayed} games.
+          </small>
+        </div>
       )}
 
       {receivingOnly && matchup && (
