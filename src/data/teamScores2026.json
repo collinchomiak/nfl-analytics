@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-11-02T20:09:45.154Z",
+  "updatedAt": "2026-11-03T17:39:41.249Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -1109,6 +1109,16 @@
       "homeTeam": "GB",
       "awayScore": 19,
       "homeScore": 27,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_08_CHI_SEA",
+      "week": 8,
+      "awayTeam": "CHI",
+      "homeTeam": "SEA",
+      "awayScore": 34,
+      "homeScore": 17,
       "location": "Home",
       "neutralSite": false
     },
