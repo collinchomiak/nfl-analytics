@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-11-03T17:39:41.249Z",
+  "updatedAt": "2026-11-06T17:18:47.844Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -1209,6 +1209,16 @@
       "homeTeam": "CIN",
       "awayScore": 36,
       "homeScore": 43,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_09_JAX_BAL",
+      "week": 9,
+      "awayTeam": "JAX",
+      "homeTeam": "BAL",
+      "awayScore": 33,
+      "homeScore": 10,
       "location": "Home",
       "neutralSite": false
     }
