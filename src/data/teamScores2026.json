@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-11-09T20:35:58.831Z",
+  "updatedAt": "2026-11-10T17:37:43.251Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -1219,6 +1219,16 @@
       "homeTeam": "SEA",
       "awayScore": 3,
       "homeScore": 17,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_09_BUF_MIN",
+      "week": 9,
+      "awayTeam": "BUF",
+      "homeTeam": "MIN",
+      "awayScore": 23,
+      "homeScore": 6,
       "location": "Home",
       "neutralSite": false
     },
