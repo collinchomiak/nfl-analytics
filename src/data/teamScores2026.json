@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-11-17T19:01:49.321Z",
+  "updatedAt": "2026-11-20T18:27:11.759Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -1499,6 +1499,16 @@
       "homeTeam": "NYG",
       "awayScore": 24,
       "homeScore": 21,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_11_IND_HOU",
+      "week": 11,
+      "awayTeam": "IND",
+      "homeTeam": "HOU",
+      "awayScore": 3,
+      "homeScore": 26,
       "location": "Home",
       "neutralSite": false
     }
