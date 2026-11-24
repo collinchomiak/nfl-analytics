@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-11-23T21:58:17.028Z",
+  "updatedAt": "2026-11-24T20:34:27.759Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -1519,6 +1519,16 @@
       "homeTeam": "CAR",
       "awayScore": 33,
       "homeScore": 35,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_11_CIN_WAS",
+      "week": 11,
+      "awayTeam": "CIN",
+      "homeTeam": "WAS",
+      "awayScore": 20,
+      "homeScore": 22,
       "location": "Home",
       "neutralSite": false
     },
