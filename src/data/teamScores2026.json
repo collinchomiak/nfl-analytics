@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-11-24T20:34:27.759Z",
+  "updatedAt": "2026-11-26T19:28:46.124Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -1629,6 +1629,16 @@
       "homeTeam": "DAL",
       "awayScore": 30,
       "homeScore": 51,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_12_GB_LA",
+      "week": 12,
+      "awayTeam": "GB",
+      "homeTeam": "LA",
+      "awayScore": 13,
+      "homeScore": 26,
       "location": "Home",
       "neutralSite": false
     }
