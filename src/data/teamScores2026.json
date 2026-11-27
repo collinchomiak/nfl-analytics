@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-11-26T19:28:46.124Z",
+  "updatedAt": "2026-11-27T19:24:48.162Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -1633,12 +1633,42 @@
       "neutralSite": false
     },
     {
+      "gameId": "2026_12_CHI_DET",
+      "week": 12,
+      "awayTeam": "CHI",
+      "homeTeam": "DET",
+      "awayScore": 39,
+      "homeScore": 35,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
       "gameId": "2026_12_GB_LA",
       "week": 12,
       "awayTeam": "GB",
       "homeTeam": "LA",
       "awayScore": 13,
       "homeScore": 26,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_12_KC_BUF",
+      "week": 12,
+      "awayTeam": "KC",
+      "homeTeam": "BUF",
+      "awayScore": 10,
+      "homeScore": 13,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_12_PHI_DAL",
+      "week": 12,
+      "awayTeam": "PHI",
+      "homeTeam": "DAL",
+      "awayScore": 39,
+      "homeScore": 38,
       "location": "Home",
       "neutralSite": false
     }
