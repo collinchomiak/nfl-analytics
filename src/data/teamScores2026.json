@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updatedAt": "2026-11-27T19:24:48.162Z",
+  "updatedAt": "2026-11-28T18:03:36.886Z",
   "games": [
     {
       "gameId": "2026_01_ARI_LAC",
@@ -1639,6 +1639,16 @@
       "homeTeam": "DET",
       "awayScore": 39,
       "homeScore": 35,
+      "location": "Home",
+      "neutralSite": false
+    },
+    {
+      "gameId": "2026_12_DEN_PIT",
+      "week": 12,
+      "awayTeam": "DEN",
+      "homeTeam": "PIT",
+      "awayScore": 5,
+      "homeScore": 27,
       "location": "Home",
       "neutralSite": false
     },
